@@ -68,7 +68,6 @@ export default class ProtectedView extends React.Component {
         <h1>Loading data...</h1>
       )
     } else {
-        console.log(this.state)
       return (
         <div>
             <div>

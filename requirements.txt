@@ -17,7 +17,6 @@ Jinja2==2.8
 Mako==1.0.4
 MarkupSafe==0.23
 mysql-connector==2.1.4
-mysql-connector-python-rf==2.2.2
 psycopg2==2.7.1
 py==1.4.31
 py-bcrypt==0.4
