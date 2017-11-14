@@ -3,6 +3,7 @@ from .models import User, Transcripts
 from index import app, db
 from sqlalchemy.exc import IntegrityError
 from .utils.auth import generate_token, requires_auth, verify_token
+import operator
 
 
 @app.route('/', methods=['GET'])
@@ -63,17 +64,27 @@ def is_token_valid():
 @app.route("/api/search_results", methods=["POST"])
 def get_results():
     incoming = request.get_json()
+
+    # Search term provided by client
     search_term = incoming["search"]
-    # results = db.session.query(Transcripts).filter(Transcripts.transcript.contains(search_term))
+
+    # SQL query to search
     query = "SELECT * FROM Transcripts WHERE transcript LIKE \'%{0}%\'".format(search_term)
     query_result = db.session.execute(query)
 
+    # Build result record with the number of mentions
     results = []
     for row in query_result.fetchall():
-        result = {"id": row[0], "transcript": row[1], "url": row[2]}
+        result = {"id": row[0], "transcript": row[1], "url": row[2], "number_of_mentions": row[1].count(search_term)}
+        results.append(result)
 
+    # Sort results by number of mentions in descending order
+    sorted_results = sorted(results, key=operator.itemgetter("number_of_mentions"), reverse=True)
 
-    number_of_results = len(query_result.fetchall())
+    # Count total number of results
+    number_of_results = len(sorted_results)
+    
     return jsonify(
-        numberOfResults=number_of_results
+        numberOfResults=number_of_results,
+        results=sorted_results
     )
