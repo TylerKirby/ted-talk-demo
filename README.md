@@ -6,7 +6,7 @@ First make sure you have [MySQL](https://dev.mysql.com/downloads/mysql/) install
 Install the `mysql` CLI via brew: `brew install mysql`
 Log into mysql with `mysql -u YOUR_USERNAME -p` and provide your password.
 Create database with `create database mydatabase`. Be sure to call database `mydatabase`.
-In the `config.py` file under the root directory, replace the `DATABASE_URL` with `mysql+mysqlconnector://YOUR_USERNAME:YOUR_PASSWORD@localhost/mydatabase`
+In the `config.py` file under the root directory, replace the `DATABASE_URL` with `mysql+mysqlconnector://YOUR_USERNAME:YOUR_PASSWORD@localhost/mydatabase`. Be sure to use your actual MySQL username and password here/
 
 You should be up and running with MySQL now!
 
