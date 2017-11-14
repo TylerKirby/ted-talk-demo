@@ -5,6 +5,9 @@ import * as actionCreators from '../actions/data';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
+import Highlighter from 'react-highlight-words';
+
+import styles from '../style.scss';
 
 function mapStateToProps(state) {
     return {
@@ -27,10 +30,12 @@ export default class ProtectedView extends React.Component {
 		super(props);
 
 		this.state = {
-			search: ""
-        }
+			search: "",
+			numberOfResults: "",
+			top100Results: [],
+    }
         
-        this.postSearchResult = this.postSearchResult.bind(this);
+    this.postSearchResult = this.postSearchResult.bind(this);
 	}
 
 	componentDidMount() {
@@ -43,52 +48,79 @@ export default class ProtectedView extends React.Component {
     }
     
     postSearchResult() {
-        // fetch('http://localhost:5000/api/search_results', {
-        //     method: 'POST',
-        //     body: JSON.stringify({
-        //         search: this.state.search,
-        //     })
-        // }).then(({ data }) => console.log(data))
-        //   .catch(error => console.log(error));
-        axios.post('/api/search_results', { search: this.state.search }).then((response) => console.log(response));
+			axios.post('/api/search_results', { search: this.state.search })
+					 .then((response) => {
+						//  console.log(response);
+						 this.setState({
+								numberOfResults: response.data.numberOfResults,
+								top100Results: response.data.results.slice(0, 101),
+             });
+           })
+           .catch(error => console.log(error));
     }
 
 	render() {
-		console.log(this.state)
-		return (
-			<div>
-				{
-					!this.props.loaded ? 
-						<h1>Loading data...</h1>
-						:
-						<div>
-								<div>
-									<h1>Welcome back,{this.props.userName}!</h1>
-									<h1>{this.props.data.data.email}</h1>
-									<h2>Search over 2,000 TED Talks!</h2>
-								</div>
-								<div>
-									<TextField
-										hintText="Search..."
-										onChange={(e, value) => this.setState({ search: value })}
-									/>
-                                    <RaisedButton 
-                                        label="Search" 
-                                        primary={true} 
-                                        onClick={this.postSearchResult}
+    const { loaded } = this.props;
+    const { top100Results, numberOfResults, search } = this.state;
+
+    if (!loaded) {
+      return (
+        <h1>Loading data...</h1>
+      )
+    } else {
+        console.log(this.state)
+      return (
+        <div>
+            <div>
+              <h1>Welcome back,{this.props.userName}!</h1>
+              <h2>Search over 2,000 TED Talks!</h2>
+            </div>
+            <div>
+              <TextField
+                hintText="Search..."
+                onChange={(e, value) => this.setState({ search: value })}
+              />
+              <RaisedButton 
+                  label="Search" 
+                  primary={true} 
+                  onClick={this.postSearchResult}
+              />
+            </div>
+            {
+              top100Results.length > 0 &&
+                <div>
+                    <div>
+                        <h2>Number of Results: {numberOfResults}</h2>
+                        <h2>Top 100 Results: </h2>
+                    </div>
+                    <div>
+                        {
+                            top100Results.map(result => (
+                                <div key={result.id}>
+                                    <h3>URL: <a href={result.url}>{result.url}</a></h3>
+                                    <Highlighter
+                                        highlightClassName={styles.Active}
+                                        searchWords={[search]}
+                                        autoEscape={true}
+                                        textToHighlight={result.transcript}
                                     />
-								</div>
-						</div>
-				}
-			</div>
-		);
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+                
+            }
+        </div>
+      );
+    }
 	}
 }
 
 ProtectedView.propTypes = {
-    fetchProtectedData: React.PropTypes.func,
-    loaded: React.PropTypes.bool,
-    userName: React.PropTypes.string,
-    data: React.PropTypes.any,
-    token: React.PropTypes.string,
+	fetchProtectedData: React.PropTypes.func,
+	loaded: React.PropTypes.bool,
+	userName: React.PropTypes.string,
+	data: React.PropTypes.any,
+	token: React.PropTypes.string,
 };

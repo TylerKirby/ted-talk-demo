@@ -116,5 +116,7 @@
     "webpack-merge": "^1.0.2",
     "yargs": "^6.5.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-highlight-words": "^0.10.0"
+  }
 }
