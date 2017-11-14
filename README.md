@@ -47,6 +47,14 @@ $ cd static
 $ npm install
 ```
 
+### Install Backend Requirements
+```sh
+$ pip install virtualenv
+$ virtualenv venv --distribute
+$ source venv/bin/activate
+$ sudo pip2 install -r requirements.txt
+```
+
 ### Run Back-End
 
 ```sh
