@@ -22,3 +22,13 @@ class User(db.Model):
             return user
         else:
             return None
+
+class Transcripts(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    transcript = db.Column(db.Text())
+    url = db.Column(db.String(255))
+
+    def __init__(self, transcript, url):
+        self.transcript = transcript
+        self.url = url
+

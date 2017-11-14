@@ -30,10 +30,7 @@ def create_user():
     )
     db.session.add(user)
 
-    try:
-        db.session.commit()
-    except IntegrityError:
-        return jsonify(message="User with that email already exists"), 409
+    db.session.commit()
 
     new_user = User.query.filter_by(email=incoming["email"]).first()
 
