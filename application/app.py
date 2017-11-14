@@ -59,3 +59,9 @@ def is_token_valid():
         return jsonify(token_is_valid=True)
     else:
         return jsonify(token_is_valid=False), 403
+
+@app.route("/api/search_results", methods=["POST"])
+def get_results():
+    incoming = request.get_json()
+    print incoming["search"]
+    return jsonify(works=True)
