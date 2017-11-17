@@ -63,11 +63,7 @@ export default class ProtectedView extends React.Component {
     const { loaded } = this.props;
     const { top100Results, numberOfResults, search } = this.state;
 
-    if (!loaded) {
-      return (
-        <h1>Loading data...</h1>
-      )
-    } else {
+
       return (
         <div>
             <div>
@@ -113,7 +109,6 @@ export default class ProtectedView extends React.Component {
         </div>
       );
     }
-	}
 }
 
 ProtectedView.propTypes = {
