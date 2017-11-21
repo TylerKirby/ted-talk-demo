@@ -1,4 +1,6 @@
 # TED Talk Reader #
+Read and search thousands of TED talk transcripts!
+
 The following build instructions have been tested on macOS 10.13.1.
 
 Begin by cloning the repo and then `cd tedTalkDemo`.
